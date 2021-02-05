@@ -6,59 +6,82 @@
     <title>Document</title>
     <link rel="stylesheet" href="bootstrap.css">
     <script src="ajax.js"></script>
+    <script src="jquery-1.7.1.min.js"></script>
     <script>
-        window.onload = function(){
-            var iBtn = document.getElementById('btn');
-            var oTbody = document.getElementById('t1');
-            iBtn.onclick = function(){
-                ajax({
-                    method:'post',
-                    url:'userlist.php',
-                    success:function(result){
-                        var str = JSON.parse(result);
+        // window.onload = function(){
+        //     var iBtn = document.getElementById('btn');
+        //     var oTbody = document.getElementById('t1');
+        //     iBtn.onclick = function(){
+        //         ajax({
+        //             method:'post',
+        //             url:'userlist.php',
+        //             success:function(result){
+        //                 var str = JSON.parse(result);
+        //                 var strs = '';
+        //                 for(var i=0;i<str.length;i++){
+        //                     strs += `<tr id="${str[i][0]}">
+        //                         <td>${str[i][0]}</td>
+        //                          <td>${str[i][1]}</td>
+        //                         <td>${str[i][2]}</td>
+        //                         <td><a href="update.html">修改</a>&nbsp;&nbsp;<a href="#">删除</a></td>
+        //                         </tr>`;
+        //                 }
+        //                 oTbody.innerHTML = strs;                       
+        //             },
+        //             error: function(error){
+        //                 alert(error);
+        //             }
+        //         });
+        //     }
+        //         //事件委托 删除按键
+        //         oTbody.onclick =  function(ev){
+        //             var e = ev||window.event;
+        //             var target = e.target||e.srcElement;
+        //             if(target.nodeName.toLowerCase() == 'a'&&target.innerHTML=="删除"){
+        //                 oTbody.removeChild(target.parentNode.parentNode);
+        //                 ajax({
+        //                     method:'get',
+        //                     url:'removeUser.php',
+        //                     data:{
+        //                         id:target.parentNode.parentNode.id
+        //                     },
+        //                     success:function(result){
+        //                         var str = JSON.parse(result);
+        //                         alert(str.msg);
+        //                     },
+        //                     error:function(msg){
+        //                         alert(msg);
+        //                     }
+        //                 });
+        //             }
+        //         }
+        // }
+            $(function(){
+                $('#btn').click(function(){
+                    $.post('userlist.php',function(data,status){
+                        var str = JSON.parse(data);
                         var strs = '';
                         for(var i=0;i<str.length;i++){
                             strs += `<tr id="${str[i][0]}">
                                 <td>${str[i][0]}</td>
                                  <td>${str[i][1]}</td>
                                 <td>${str[i][2]}</td>
-                                <td><a href="update.html">修改</a>&nbsp;&nbsp;<a href="#">删除</a></td>
+                                <td><a href="update.html?id=${str[i][0]}">修改</a>&nbsp;&nbsp;<a href="#">删除</a></td>
                                 </tr>`;
                         }
-                        oTbody.innerHTML = strs;                       
-                    },
-                    error: function(error){
-                        alert(error);
-                    }
+                        $('#t1').html(strs);
+                    });
                 });
-            }
-                //事件委托 删除按键
-                oTbody.onclick =  function(ev){
-                    var e = ev||window.event;
-                    var target = e.target||e.srcElement;
-                    if(target.nodeName.toLowerCase() == 'a'&&target.innerHTML=="删除"){
-                        oTbody.removeChild(target.parentNode.parentNode);
-                        ajax({
-                            method:'get',
-                            url:'removeUser.php',
-                            data:{
-                                id:target.parentNode.parentNode.id
-                            },
-                            success:function(result){
-                                var str = JSON.parse(result);
-                                alert(str.msg);
-                            },
-                            error:function(msg){
-                                alert(msg);
-                            }
-                        });
-                    }
+                $('#t1').on('click',"a.[href='#']",function(){
+                    $(this.parentNode.parentNode).remove();
+                    $.post('removeUser.php',{
+                        id:this.parentNode.parentNode.id
+                    },function(data,status){
+                        alert(JSON.parse(data).msg);
+                    });
+                });
+            });
 
-
-                }
-
-
-        }
     </script>
 </head>
 <body>

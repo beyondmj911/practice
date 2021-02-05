@@ -9,17 +9,21 @@ if(!$link){
     echo json_encode($response);
     exit;
 }
-
 mysql_select_db('hhp');
 mysql_set_charset('utf8');
-$sql = "DELETE from users WHERE id=$id";
+$sql = "SELECT * FROM users WHERE id='{$id}'";
 $res = mysql_query($sql);
-if(!$res){
+$row = mysql_fetch_array($res);
+
+if(!$row){
     $response['code']=2;
-    $response['msg'] = "数据删除失败";
-    echo json_encode($response);   
-}else{
-    $response['msg'] = "数据删除成功";
+    $response['msg'] = "该用户不存在";
     echo json_encode($response);
+}else{
+    echo json_encode($row);
 }
+
+
+
 mysql_close($link);
+?>

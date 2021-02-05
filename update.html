@@ -5,17 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="bootstrap.css">
+    <script src="jquery-1.7.1.min.js"></script>
+    <script>
+      $(function(){
+        var url = location.search;//?id=111
+        var userid = url.slice(4);
+        $.post('update.php',{
+          id: userid
+        },function(data){
+            var str = JSON.parse(data);
+            $('input').eq(0).val(str.username);
+            $('input').eq(1).val(str.pwd);
+        });
+        $('button').click(function(){
+          $.post('update1.php',{
+            username:$('input').eq(0).val(),
+            password:$('input').eq(1).val()
+          },function(data){
+            var str = JSON.parse(data);
+            alert(str.msg);
+          });
+        });
+
+
+      });
+
+    </script>
 </head>
 <body>
   <div class="container">
     <div class="mb-3">
         <label for="formGroupExampleInput" class="form-label">用户名</label>
-        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="用户名">
+        <input type="text" class="form-control" id="formGroupExampleInput" disabled>
       </div>
       <div class="mb-3">
         <label for="formGroupExampleInput2" class="form-label">密码</label>
-        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="密码">
+        <input type="text" class="form-control" id="formGroupExampleInput2">
       </div>
+      <button class="btn btn-primary">修改</button>
+      <a href="login.html" class="mx-4">重新登陆</a>
     </div>
 </body>
 </html>

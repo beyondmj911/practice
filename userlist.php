@@ -11,11 +11,10 @@ if(!$link){
 
 mysql_select_db('hhp');
 mysql_set_charset('utf8');
-$sql1 = "SELECT * FROM users";
-$res1 = mysql_query($sql1);
-$row = mysql_fetch_row($res1);
+$sql = "SELECT * FROM users";
+$res = mysql_query($sql);
 $atr = array();
-while($row = mysql_fetch_row($res1)){
+while($row = mysql_fetch_row($res)){
     array_push($atr,$row);
 }
 echo json_encode($atr);

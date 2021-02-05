@@ -6,38 +6,59 @@
     <title>Document</title>
     <link rel="stylesheet" href="bootstrap.css">
     <script src="ajax.js"></script>
+    <script src="jquery-1.7.1.min.js"></script>
     <script>
-        window.onload = function(){
-            var iBtn = document.getElementById('btn');
-            var inputs = document.getElementsByTagName('input');
-            var iTip = document.getElementById('tips');
-            iBtn.onclick = function(){
-                ajax({
-                    method:'post',
-                    url:'register.php',
-                    data:{
-                        username:inputs[0].value,
-                        password:inputs[1].value
-                    },
-                    success:function(result){  
-                        var obj = JSON.parse(result);
+        // window.onload = function(){
+        //     var iBtn = document.getElementById('btn');
+        //     var inputs = document.getElementsByTagName('input');
+        //     var iTip = document.getElementById('tips');
+        //     iBtn.onclick = function(){
+        //         ajax({
+        //             method:'post',
+        //             url:'register.php',
+        //             data:{
+        //                 username:inputs[0].value,
+        //                 password:inputs[1].value
+        //             },
+        //             success:function(result){  
+        //                 var obj = JSON.parse(result);
+        //                 if(!obj.code){
+        //                     iTip.innerHTML = obj.msg;
+        //                     iTip.className = "alert alert-success"; 
+        //                 }
+        //                 else{
+        //                     iTip.className = "alert alert-danger";
+        //                     iTip.innerHTML = obj.msg;
+                            
+        //                 }
+                        
+        //             },
+        //             error:function(msg){
+        //                 alert(msg);
+        //             }
+        //         });
+        //     }
+        // }
+            $(function(){
+                $('#btn').click(function(){
+                    $.post("register.php",{
+                        username:$('input').eq(0).val(),
+                        password:$('input').eq(1).val()
+                    },function(data){
+                        var obj = JSON.parse(data);
                         if(!obj.code){
-                            iTip.innerHTML = obj.msg;
-                            iTip.className = "alert alert-success"; 
+                            $('#tips').removeClass();
+                            $('#tips').html(obj.msg);
+                            $('#tips').addClass("alert alert-success"); 
                         }
                         else{
-                            iTip.className = "alert alert-danger";
-                            iTip.innerHTML = obj.msg;
-                            
+                            $('#tips').addClass("alert alert-danger");
+                            $('#tips').html(obj.msg);                          
                         }
-                        
-                    },
-                    error:function(msg){
-                        alert(msg);
-                    }
+                    });
                 });
-            }
-        }
+            });
+
     </script>
 </head>
 <body>

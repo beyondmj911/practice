@@ -1,6 +1,7 @@
 <?php 
 header("Content-Type: text/html;charset=utf-8");
-$id = $_POST['id'];
+$username = $_POST['username'];
+$password = $_POST['password'];
 $response = array('code'=>0,'msg'=>'');
 $link = mysql_connect('localhost','root','123456');
 if(!$link){
@@ -9,17 +10,17 @@ if(!$link){
     echo json_encode($response);
     exit;
 }
-
 mysql_select_db('hhp');
 mysql_set_charset('utf8');
-$sql = "DELETE from users WHERE id=$id";
-$res = mysql_query($sql);
-if(!$res){
+$sql1 = "UPDATE users SET pwd='{$password}' WHERE username='{$username}'";
+$res1 = mysql_query($sql1);
+if(!$res1){
     $response['code']=2;
-    $response['msg'] = "数据删除失败";
-    echo json_encode($response);   
+    $response['msg'] = "修改失败";
+    echo json_encode($response);
 }else{
-    $response['msg'] = "数据删除成功";
+    $response['msg'] = "修改成功";
     echo json_encode($response);
 }
 mysql_close($link);
+?>
